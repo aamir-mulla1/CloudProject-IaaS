@@ -25,6 +25,15 @@ else
     app.UseMigrationsEndPoint();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<SchoolContext>();
+    context.Database.Migrate();
+    DbInitializer.Initialize(context);
+}
+
+/*  Old version
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -35,6 +44,7 @@ using (var scope = app.Services.CreateScope())
 
     DbInitializer.Initialize(context);
 }
+*/
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
